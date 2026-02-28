@@ -4,371 +4,178 @@
 <meta charset="UTF-8">
 
 <meta name="google-site-verification" content="5bGwiK5d-UJl66ablNELEvM0WSyzjw_MOzX_5Qb5F84" />
-    
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Space Quiz</title>
+<title>Space Mission Quiz</title>
 <style>
-    body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        margin: 0;
-        padding: 0;
-        overflow-x: hidden;
-        background: #0f2027;
-        color: #fff;
-    }
-    .container {
-        position: relative;
-        max-width: 900px;
-        margin: 50px auto;
-        background: rgba(0,0,0,0.7);
-        padding: 30px;
-        border-radius: 15px;
-        box-shadow: 0 0 20px #00ffff;
-        z-index: 1;
-    }
-    h1 {
-        text-align: center;
-        color: #00ffff;
-        margin-bottom: 20px;
-        text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff;
-    }
-    .question { margin: 20px 0; }
-    .question h3 { margin-bottom: 10px; }
-    .options label {
-        display: block;
-        background: rgba(255, 255, 255, 0.05);
-        padding: 10px;
-        margin-bottom: 5px;
-        border-radius: 10px;
-        cursor: pointer;
-        transition: 0.3s;
-        border: 1px solid rgba(0,255,255,0.3);
-    }
-    .options label:hover { background: rgba(0, 255, 255, 0.2); box-shadow: 0 0 10px #00ffff,0 0 20px #00ffff; }
-    input[type="radio"] { display: none; }
-    input[type="radio"]:checked + span { background: rgba(0,255,255,0.3); box-shadow:0 0 10px #00ffff,0 0 20px #00ffff; color:#00ffff; }
-    button {
-        display: block;
-        margin: 30px auto 0;
-        padding: 10px 30px;
-        font-size: 18px;
-        background: #00ffff;
-        color: #000;
-        border: none;
-        border-radius: 10px;
-        cursor: pointer;
-        transition: 0.3s;
-    }
-    button:hover { background: #00b8b8; }
-    .result { text-align: center; font-size: 22px; margin-top: 20px; color: #ffeb3b; }
-    .star {
-        position: absolute;
-        background: white;
-        border-radius: 50%;
-        opacity: 0.8;
-        animation: floatStars linear infinite;
-    }
-    @keyframes floatStars { 0% { transform: translateY(0) translateX(0); opacity: 0.8; } 100% { transform: translateY(-110vh) translateX(50px); opacity: 0.2; } }
-    /* Confetti styles */
-    .confetti {
-        position: fixed;
-        width: 10px;
-        height: 10px;
-        background: red;
-        top: 0;
-        z-index: 9999;
-        pointer-events: none;
-        opacity: 0.9;
-        border-radius: 50%;
-    }
+body { font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin:0; padding:0; overflow-x:hidden; background:#0f2027; color:#fff; }
+.container { max-width:900px; margin:50px auto; background: rgba(0,0,0,0.7); padding:30px; border-radius:15px; box-shadow:0 0 20px #00ffff; position:relative; }
+h1,h2 { text-align:center; color:#00ffff; text-shadow:0 0 10px #00ffff,0 0 20px #00ffff; }
+.question { margin:20px 0; } .question h3 { margin-bottom:10px; }
+.options label { display:block; background: rgba(255,255,255,0.05); padding:10px; margin-bottom:5px; border-radius:10px; cursor:pointer; border:1px solid rgba(0,255,255,0.3); transition:0.3s; }
+.options label:hover { background: rgba(0,255,255,0.2); box-shadow:0 0 10px #00ffff,0 0 20px #00ffff; }
+input[type="radio"] { display:none; }
+input[type="radio"]:checked + span { background: rgba(0,255,255,0.3); box-shadow:0 0 10px #00ffff,0 0 20px #00ffff; color:#00ffff; }
+button { display:block; margin:20px auto; padding:10px 30px; font-size:18px; background:#00ffff; color:#000; border:none; border-radius:10px; cursor:pointer; transition:0.3s; }
+button:hover { background:#00b8b8; }
+.result { text-align:center; font-size:22px; margin-top:20px; color:#ffeb3b; }
+#timer { font-size:20px; text-align:center; margin-bottom:10px; color:#ffeb3b; }
+.progress-container { width:100%; background:#111; height:20px; border-radius:10px; margin-bottom:15px; position:relative; }
+.progress-bar { height:100%; width:0%; background:#00ffff; border-radius:10px; transition:0.5s; }
+#spaceship { position:absolute; top:-12px; left:0; width:40px; transition:0.5s; }
+.star { position:absolute; width:2-4px; height:2-4px; background:white; border-radius:50%; opacity:0.8; animation: floatStars linear infinite; }
+@keyframes floatStars { 0% { transform: translateY(0) translateX(0); opacity:0.8; } 100% { transform: translateY(-110vh) translateX(50px); opacity:0.2; } }
+.confetti { position:fixed; width:10px; height:10px; top:0; z-index:9999; pointer-events:none; opacity:0.9; border-radius:50%; }
 </style>
 </head>
 <body>
+
+<!-- Sounds -->
+<audio id="tickSound" src="https://www.soundjay.com/buttons/sounds/beep-07.mp3"></audio>
+<audio id="correctSound" src="https://www.soundjay.com/buttons/sounds/button-10.mp3"></audio>
+<audio id="wrongSound" src="https://www.soundjay.com/buttons/sounds/button-16.mp3"></audio>
+<audio id="celebrationSound" src="https://www.soundjay.com/misc/sounds/confetti-1.mp3"></audio>
+
 <script>
-    // Floating stars
-    for(let i=0;i<100;i++){
-        let star=document.createElement('div');
-        star.className='star';
-        let size=Math.random()*3+1;
-        star.style.width=size+'px';
-        star.style.height=size+'px';
-        star.style.left=Math.random()*100+'vw';
-        star.style.top=Math.random()*100+'vh';
-        star.style.animationDuration=(Math.random()*20+10)+'s';
-        document.body.appendChild(star);
-    }
+// Floating stars
+for(let i=0;i<100;i++){
+  let s=document.createElement('div'); s.className='star';
+  let size=Math.random()*3+1; s.style.width=size+'px'; s.style.height=size+'px';
+  s.style.left=Math.random()*100+'vw'; s.style.top=Math.random()*100+'vh';
+  s.style.animationDuration=(Math.random()*20+10)+'s';
+  document.body.appendChild(s);
+}
 </script>
 
-<div class="container">
+<!-- Start Screen -->
+<div class="container" id="startScreen">
+<h1>Welcome to the Space Mission Quiz</h1>
+<h2>Created by Deep</h2>
+<button onclick="startQuiz()">Start Quiz</button>
+</div>
+
+<!-- Quiz Screen -->
+<div class="container" id="quizContainer" style="display:none;">
 <h1>🌌 Space Quiz 🌌</h1>
-<form id="quizForm">
-
-<!-- 20 Questions -->
-<!-- Question 1 -->
-<div class="question">
-<h3>1. What is the largest planet in our solar system?</h3>
-<div class="options">
-<label><input type="radio" name="q1" value="Jupiter"><span>Jupiter</span></label>
-<label><input type="radio" name="q1" value="Saturn"><span>Saturn</span></label>
-<label><input type="radio" name="q1" value="Earth"><span>Earth</span></label>
-<label><input type="radio" name="q1" value="Mars"><span>Mars</span></label>
+<div class="progress-container">
+<img id="spaceship" src="https://cdn-icons-png.flaticon.com/512/3210/3210613.png">
+<div class="progress-bar" id="progressBar"></div>
 </div>
+<div id="timer">Time Left: 20s</div>
+<div id="questionBox"></div>
+<button id="nextBtn" onclick="nextQuestion()">Next</button>
 </div>
 
-<!-- Question 2 -->
-<div class="question">
-<h3>2. Which planet is known as the Red Planet?</h3>
-<div class="options">
-<label><input type="radio" name="q2" value="Venus"><span>Venus</span></label>
-<label><input type="radio" name="q2" value="Mars"><span>Mars</span></label>
-<label><input type="radio" name="q2" value="Mercury"><span>Mercury</span></label>
-<label><input type="radio" name="q2" value="Jupiter"><span>Jupiter</span></label>
-</div>
-</div>
-
-<!-- Question 3 -->
-<div class="question">
-<h3>3. Who was the first person to travel into space?</h3>
-<div class="options">
-<label><input type="radio" name="q3" value="Yuri Gagarin"><span>Yuri Gagarin</span></label>
-<label><input type="radio" name="q3" value="Neil Armstrong"><span>Neil Armstrong</span></label>
-<label><input type="radio" name="q3" value="Buzz Aldrin"><span>Buzz Aldrin</span></label>
-<label><input type="radio" name="q3" value="Sally Ride"><span>Sally Ride</span></label>
-</div>
-</div>
-
-<!-- Question 4 -->
-<div class="question">
-<h3>4. What is the Sun primarily made of?</h3>
-<div class="options">
-<label><input type="radio" name="q4" value="Hydrogen"><span>Hydrogen</span></label>
-<label><input type="radio" name="q4" value="Helium"><span>Helium</span></label>
-<label><input type="radio" name="q4" value="Oxygen"><span>Oxygen</span></label>
-<label><input type="radio" name="q4" value="Carbon"><span>Carbon</span></label>
-</div>
-</div>
-
-<!-- Question 5 -->
-<div class="question">
-<h3>5. Which planet has the most moons?</h3>
-<div class="options">
-<label><input type="radio" name="q5" value="Jupiter"><span>Jupiter</span></label>
-<label><input type="radio" name="q5" value="Saturn"><span>Saturn</span></label>
-<label><input type="radio" name="q5" value="Mars"><span>Mars</span></label>
-<label><input type="radio" name="q5" value="Earth"><span>Earth</span></label>
-</div>
-</div>
-
-<!-- Question 6 -->
-<div class="question">
-<h3>6. Which planet is closest to the Sun?</h3>
-<div class="options">
-<label><input type="radio" name="q6" value="Mercury"><span>Mercury</span></label>
-<label><input type="radio" name="q6" value="Venus"><span>Venus</span></label>
-<label><input type="radio" name="q6" value="Earth"><span>Earth</span></label>
-<label><input type="radio" name="q6" value="Mars"><span>Mars</span></label>
-</div>
-</div>
-
-<!-- Question 7 -->
-<div class="question">
-<h3>7. What is the closest star to Earth?</h3>
-<div class="options">
-<label><input type="radio" name="q7" value="Proxima Centauri"><span>Proxima Centauri</span></label>
-<label><input type="radio" name="q7" value="Sirius"><span>Sirius</span></label>
-<label><input type="radio" name="q7" value="Sun"><span>Sun</span></label>
-<label><input type="radio" name="q7" value="Alpha Centauri"><span>Alpha Centauri</span></label>
-</div>
-</div>
-
-<!-- Question 8 -->
-<div class="question">
-<h3>8. What type of celestial body is the Moon?</h3>
-<div class="options">
-<label><input type="radio" name="q8" value="Satellite"><span>Satellite</span></label>
-<label><input type="radio" name="q8" value="Planet"><span>Planet</span></label>
-<label><input type="radio" name="q8" value="Star"><span>Star</span></label>
-<label><input type="radio" name="q8" value="Asteroid"><span>Asteroid</span></label>
-</div>
-</div>
-
-<!-- Question 9 -->
-<div class="question">
-<h3>9. Which planet is famous for its Great Red Spot?</h3>
-<div class="options">
-<label><input type="radio" name="q9" value="Jupiter"><span>Jupiter</span></label>
-<label><input type="radio" name="q9" value="Mars"><span>Mars</span></label>
-<label><input type="radio" name="q9" value="Saturn"><span>Saturn</span></label>
-<label><input type="radio" name="q9" value="Neptune"><span>Neptune</span></label>
-</div>
-</div>
-
-<!-- Question 10 -->
-<div class="question">
-<h3>10. Which planet is known as the Morning Star?</h3>
-<div class="options">
-<label><input type="radio" name="q10" value="Venus"><span>Venus</span></label>
-<label><input type="radio" name="q10" value="Mars"><span>Mars</span></label>
-<label><input type="radio" name="q10" value="Mercury"><span>Mercury</span></label>
-<label><input type="radio" name="q10" value="Jupiter"><span>Jupiter</span></label>
-</div>
-</div>
-
-<!-- Question 11 -->
-<div class="question">
-<h3>11. Which planet is known for its prominent rings?</h3>
-<div class="options">
-<label><input type="radio" name="q11" value="Saturn"><span>Saturn</span></label>
-<label><input type="radio" name="q11" value="Jupiter"><span>Jupiter</span></label>
-<label><input type="radio" name="q11" value="Uranus"><span>Uranus</span></label>
-<label><input type="radio" name="q11" value="Neptune"><span>Neptune</span></label>
-</div>
-</div>
-
-<!-- Question 12 -->
-<div class="question">
-<h3>12. What is a black hole?</h3>
-<div class="options">
-<label><input type="radio" name="q12" value="A region of space with strong gravity"><span>A region of space with strong gravity</span></label>
-<label><input type="radio" name="q12" value="A star"><span>A star</span></label>
-<label><input type="radio" name="q12" value="A planet"><span>A planet</span></label>
-<label><input type="radio" name="q12" value="A comet"><span>A comet</span></label>
-</div>
-</div>
-
-<!-- Question 13 -->
-<div class="question">
-<h3>13. What was the first manned mission to land on the Moon?</h3>
-<div class="options">
-<label><input type="radio" name="q13" value="Apollo 11"><span>Apollo 11</span></label>
-<label><input type="radio" name="q13" value="Apollo 10"><span>Apollo 10</span></label>
-<label><input type="radio" name="q13" value="Apollo 12"><span>Apollo 12</span></label>
-<label><input type="radio" name="q13" value="Apollo 13"><span>Apollo 13</span></label>
-</div>
-</div>
-
-<!-- Question 14 -->
-<div class="question">
-<h3>14. Which galaxy is Earth located in?</h3>
-<div class="options">
-<label><input type="radio" name="q14" value="Milky Way"><span>Milky Way</span></label>
-<label><input type="radio" name="q14" value="Andromeda"><span>Andromeda</span></label>
-<label><input type="radio" name="q14" value="Triangulum"><span>Triangulum</span></label>
-<label><input type="radio" name="q14" value="Whirlpool"><span>Whirlpool</span></label>
-</div>
-</div>
-
-<!-- Question 15 -->
-<div class="question">
-<h3>15. Which planet rotates on its side?</h3>
-<div class="options">
-<label><input type="radio" name="q15" value="Uranus"><span>Uranus</span></label>
-<label><input type="radio" name="q15" value="Neptune"><span>Neptune</span></label>
-<label><input type="radio" name="q15" value="Saturn"><span>Saturn</span></label>
-<label><input type="radio" name="q15" value="Jupiter"><span>Jupiter</span></label>
-</div>
-</div>
-
-<!-- Question 16 -->
-<div class="question">
-<h3>16. What are comets primarily made of?</h3>
-<div class="options">
-<label><input type="radio" name="q16" value="Ice and dust"><span>Ice and dust</span></label>
-<label><input type="radio" name="q16" value="Gas"><span>Gas</span></label>
-<label><input type="radio" name="q16" value="Rock"><span>Rock</span></label>
-<label><input type="radio" name="q16" value="Metal"><span>Metal</span></label>
-</div>
-</div>
-
-<!-- Question 17 -->
-<div class="question">
-<h3>17. Which planet is hottest in the Solar System?</h3>
-<div class="options">
-<label><input type="radio" name="q17" value="Venus"><span>Venus</span></label>
-<label><input type="radio" name="q17" value="Mercury"><span>Mercury</span></label>
-<label><input type="radio" name="q17" value="Mars"><span>Mars</span></label>
-<label><input type="radio" name="q17" value="Jupiter"><span>Jupiter</span></label>
-</div>
-</div>
-
-<!-- Question 18 -->
-<div class="question">
-<h3>18. Which constellation contains Orion’s Belt?</h3>
-<div class="options">
-<label><input type="radio" name="q18" value="Orion"><span>Orion</span></label>
-<label><input type="radio" name="q18" value="Lyra"><span>Lyra</span></label>
-<label><input type="radio" name="q18" value="Ursa Major"><span>Ursa Major</span></label>
-<label><input type="radio" name="q18" value="Cassiopeia"><span>Cassiopeia</span></label>
-</div>
-</div>
-
-<!-- Question 19 -->
-<div class="question">
-<h3>19. Which planet is known as the Ice Giant?</h3>
-<div class="options">
-<label><input type="radio" name="q19" value="Neptune"><span>Neptune</span></label>
-<label><input type="radio" name="q19" value="Uranus"><span>Uranus</span></label>
-<label><input type="radio" name="q19" value="Saturn"><span>Saturn</span></label>
-<label><input type="radio" name="q19" value="Jupiter"><span>Jupiter</span></label>
-</div>
-</div>
-
-<!-- Question 20 -->
-<div class="question">
-<h3>20. Which planet has a storm called the Great Dark Spot?</h3>
-<div class="options">
-<label><input type="radio" name="q20" value="Neptune"><span>Neptune</span></label>
-<label><input type="radio" name="q20" value="Jupiter"><span>Jupiter</span></label>
-<label><input type="radio" name="q20" value="Saturn"><span>Saturn</span></label>
-<label><input type="radio" name="q20" value="Mars"><span>Mars</span></label>
-</div>
-</div>
-
-<button type="button" onclick="checkQuiz()">Submit Quiz</button>
-</form>
-<div class="result" id="result"></div>
+<!-- Result Screen -->
+<div class="container" id="resultContainer" style="display:none;">
+<h1>Quiz Result</h1>
+<div id="scoreDetails"></div>
+<button onclick="restartQuiz()">Restart Quiz</button>
 </div>
 
 <script>
-const answers = {
-q1:"Jupiter", q2:"Mars", q3:"Yuri Gagarin", q4:"Hydrogen", q5:"Jupiter",
-q6:"Mercury", q7:"Sun", q8:"Satellite", q9:"Jupiter", q10:"Venus",
-q11:"Saturn", q12:"A region of space with strong gravity", q13:"Apollo 11",
-q14:"Milky Way", q15:"Uranus", q16:"Ice and dust", q17:"Venus", q18:"Orion",
-q19:"Neptune", q20:"Neptune"
-};
+const questions=[
+{q:"1. Largest planet in solar system?", options:["Jupiter","Saturn","Earth","Mars"], answer:"Jupiter"},
+{q:"2. Red Planet?", options:["Venus","Mars","Mercury","Jupiter"], answer:"Mars"},
+{q:"3. First person on Moon?", options:["Neil Armstrong","Buzz Aldrin","Yuri Gagarin","Michael Collins"], answer:"Neil Armstrong"},
+{q:"4. Galaxy of Earth?", options:["Milky Way","Andromeda","Triangulum","Whirlpool"], answer:"Milky Way"},
+{q:"5. Planet with most rings?", options:["Saturn","Uranus","Jupiter","Neptune"], answer:"Saturn"},
+{q:"6. Closest planet to Sun?", options:["Mercury","Venus","Earth","Mars"], answer:"Mercury"},
+{q:"7. Sun composition?", options:["Hydrogen","Helium","Oxygen","Carbon"], answer:"Hydrogen"},
+{q:"8. Closest planet to Earth?", options:["Venus","Mars","Mercury","Jupiter"], answer:"Venus"},
+{q:"9. Moon type?", options:["Satellite","Planet","Star","Asteroid"], answer:"Satellite"},
+{q:"10. Planet with Great Red Spot?", options:["Jupiter","Mars","Saturn","Neptune"], answer:"Jupiter"},
+{q:"11. Planet rotates on its side?", options:["Uranus","Venus","Mars","Jupiter"], answer:"Uranus"},
+{q:"12. Earth's twin?", options:["Venus","Mars","Mercury","Earth"], answer:"Venus"},
+{q:"13. Fastest rotating planet?", options:["Jupiter","Saturn","Earth","Mars"], answer:"Jupiter"},
+{q:"14. Constellation with Orion's Belt?", options:["Orion","Cassiopeia","Ursa Major","Lyra"], answer:"Orion"},
+{q:"15. Ice & dust object orbiting Sun?", options:["Comet","Asteroid","Meteor","Satellite"], answer:"Comet"},
+{q:"16. Mission first landing humans on Moon?", options:["Apollo 11","Apollo 13","Apollo 10","Apollo 12"], answer:"Apollo 11"},
+{q:"17. Galaxy colliding with Milky Way?", options:["Andromeda","Triangulum","Whirlpool","Milky Way"], answer:"Andromeda"},
+{q:"18. Closest star?", options:["Proxima Centauri","Sirius","Sun","Alpha Centauri"], answer:"Sun"},
+{q:"19. Largest star type?", options:["Red Supergiant","Neutron Star","White Dwarf","Black Hole"], answer:"Red Supergiant"},
+{q:"20. Planet with most moons?", options:["Jupiter","Saturn","Mars","Earth"], answer:"Jupiter"}
+];
 
-function checkQuiz(){
-    let score=0;
-    for(let i=1;i<=20;i++){
-        let q=document.querySelector(`input[name="q${i}"]:checked`);
-        if(q && q.value===answers[`q${i}`]) score++;
-    }
-    document.getElementById("result").innerText=`Your Score: ${score} / 20`;
-    if(score===20) launchConfetti();
+let currentQ=0, correct=0, wrong=0, unattempted=0, timeLeft=20, timerInterval=0;
+
+function playSound(id){document.getElementById(id).play();}
+
+function startQuiz(){
+  document.getElementById('startScreen').style.display='none';
+  document.getElementById('quizContainer').style.display='block';
+  updateProgress(); showQuestion();
 }
 
-// Confetti
-function launchConfetti(){
-    for(let i=0;i<200;i++){
-        let confetti=document.createElement('div');
-        confetti.className='confetti';
-        confetti.style.background=`hsl(${Math.random()*360},100%,50%)`;
-        confetti.style.left=Math.random()*100+'vw';
-        confetti.style.top=Math.random()*-20+'px';
-        document.body.appendChild(confetti);
-        animateConfetti(confetti);
-    }
-    setTimeout(()=>{document.querySelectorAll('.confetti').forEach(c=>c.remove())},3000);
+function showQuestion(){
+  clearInterval(timerInterval); timeLeft=20;
+  document.getElementById('timer').innerText=`Time Left: ${timeLeft}s`;
+  timerInterval=setInterval(()=>{
+    timeLeft--; document.getElementById('timer').innerText=`Time Left: ${timeLeft}s`;
+    playSound('tickSound');
+    if(timeLeft<=0){ clearInterval(timerInterval); unattempted++; nextQuestion(); }
+  },1000);
+
+  const q=questions[currentQ]; 
+  const box=document.getElementById('questionBox');
+  box.innerHTML=`<div class="question"><h3>${q.q}</h3></div>`;
+  const opts=document.createElement('div'); opts.className='options';
+  q.options.forEach(opt=>{
+    let label=document.createElement('label');
+    label.innerHTML=`<input type="radio" name="q${currentQ}" value="${opt}"><span>${opt}</span>`;
+    label.querySelector('input').addEventListener('change',()=>playSound(opt===q.answer?'correctSound':'wrongSound'));
+    opts.appendChild(label);
+  });
+  box.appendChild(opts);
+  document.getElementById('nextBtn').innerText=(currentQ===questions.length-1)?'Finish':'Next';
 }
-function animateConfetti(confetti){
-    let duration=Math.random()*2+3;
-    let x=Math.random()*100-50;
-    let y=window.innerHeight + 50;
-    confetti.animate([
-        { transform: `translate(0,0) rotate(0deg)` },
-        { transform: `translate(${x}px,${y}px) rotate(${Math.random()*360}deg)` }
-    ], { duration: duration*1000, easing: 'ease-out', fill:'forwards' });
+
+function nextQuestion(){
+  clearInterval(timerInterval);
+  const sel=document.querySelector(`input[name="q${currentQ}"]:checked`);
+  if(sel){ if(sel.value===questions[currentQ].answer) correct++; else wrong++; } else unattempted++;
+  currentQ++; updateProgress();
+  if(currentQ<questions.length) showQuestion(); else showResults();
+}
+
+function updateProgress(){
+  let percent=(currentQ/questions.length)*100;
+  document.getElementById('progressBar').style.width=percent+'%';
+  document.getElementById('spaceship').style.left=`calc(${percent}% - 20px)`;
+}
+
+function showResults(){
+  document.getElementById('quizContainer').style.display='none';
+  document.getElementById('resultContainer').style.display='block';
+  document.getElementById('scoreDetails').innerHTML=
+    `<p>Total Score: ${correct} / 20</p><p>Correct: ${correct}</p><p>Wrong: ${wrong}</p><p>Unattempted: ${unattempted}</p>`;
+  if(correct===20) playSound('celebrationSound');
+  launchConfetti(correct);
+}
+
+function restartQuiz(){
+  currentQ=0; correct=0; wrong=0; unattempted=0;
+  document.getElementById('resultContainer').style.display='none';
+  document.getElementById('startScreen').style.display='block';
+  document.getElementById('progressBar').style.width='0%';
+  document.getElementById('spaceship').style.left='0';
+}
+
+function launchConfetti(score){
+  let count=Math.floor(score*3);
+  for(let i=0;i<count;i++){
+    let c=document.createElement('div'); c.className='confetti';
+    c.style.background=`hsl(${Math.random()*360},100%,50%)`; 
+    c.style.left=Math.random()*100+'vw'; 
+    c.style.top=Math.random()*-20+'px';
+    document.body.appendChild(c); animateConfetti(c);
+  }
+  setTimeout(()=>{document.querySelectorAll('.confetti').forEach(c=>c.remove())},3000);
+}
+
+function animateConfetti(c){
+  let duration=Math.random()*2+3; let x=Math.random()*100-50; let y=window.innerHeight+50;
+  c.animate([{transform:`translate(0,0) rotate(0deg)`},{transform:`translate(${x}px,${y}px) rotate(${Math.random()*360}deg)`}],{duration:duration*1000,easing:'ease-out',fill:'forwards'});
 }
 </script>
 </body>
