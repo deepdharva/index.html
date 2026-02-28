@@ -4,127 +4,280 @@
     <meta charset="UTF-8">
 
     <meta name="google-site-verification" content="5bGwiK5d-UJl66ablNELEvM0WSyzjw_MOzX_5Qb5F84" />
-    
-    <title>Deep's Smart Calculator</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Space Quiz</title>
     <style>
         body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+            color: #fff;
             margin: 0;
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #4e73df, #1cc88a);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            padding: 0;
         }
-
-        .calculator {
-            background: white;
-            padding: 25px;
+        .container {
+            max-width: 900px;
+            margin: 50px auto;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 30px;
             border-radius: 15px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
-            width: 320px;
+            box-shadow: 0 0 20px #00ffff;
         }
-
-        h2 {
+        h1 {
             text-align: center;
-            margin-bottom: 15px;
+            color: #00ffff;
+            margin-bottom: 20px;
         }
-
-        input {
-            width: 100%;
-            height: 50px;
-            font-size: 22px;
-            text-align: right;
-            margin-bottom: 15px;
-            padding-right: 10px;
-            border-radius: 8px;
-            border: 1px solid #ccc;
+        .question {
+            margin: 20px 0;
         }
-
-        .buttons {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
+        .question h3 {
+            margin-bottom: 10px;
         }
-
-        button {
-            height: 45px;
-            font-size: 18px;
-            border: none;
-            border-radius: 8px;
+        .options label {
+            display: block;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            margin-bottom: 5px;
+            border-radius: 10px;
             cursor: pointer;
-            background-color: #4e73df;
-            color: white;
-            transition: 0.2s;
+            transition: 0.3s;
         }
-
+        .options label:hover {
+            background: rgba(0, 255, 255, 0.3);
+        }
+        button {
+            display: block;
+            margin: 30px auto 0;
+            padding: 10px 30px;
+            font-size: 18px;
+            background: #00ffff;
+            color: #000;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
         button:hover {
-            background-color: #2e59d9;
+            background: #00b8b8;
         }
-
-        .equal {
-            background-color: #1cc88a;
-        }
-
-        .clear {
-            background-color: #e74a3b;
+        .result {
+            text-align: center;
+            font-size: 22px;
+            margin-top: 20px;
+            color: #ffeb3b;
         }
     </style>
 </head>
-
 <body>
+    <div class="container">
+        <h1>🌌 Space Quiz 🌌</h1>
+        <form id="quizForm">
+            <!-- 20 Questions -->
+            <div class="question">
+                <h3>1. What is the largest planet in our solar system?</h3>
+                <div class="options">
+                    <label><input type="radio" name="q1" value="Jupiter"> Jupiter</label>
+                    <label><input type="radio" name="q1" value="Saturn"> Saturn</label>
+                    <label><input type="radio" name="q1" value="Earth"> Earth</label>
+                    <label><input type="radio" name="q1" value="Mars"> Mars</label>
+                </div>
+            </div>
+            <div class="question">
+                <h3>2. Which planet is known as the Red Planet?</h3>
+                <div class="options">
+                    <label><input type="radio" name="q2" value="Mars"> Mars</label>
+                    <label><input type="radio" name="q2" value="Venus"> Venus</label>
+                    <label><input type="radio" name="q2" value="Mercury"> Mercury</label>
+                    <label><input type="radio" name="q2" value="Jupiter"> Jupiter</label>
+                </div>
+            </div>
+            <div class="question">
+                <h3>3. What galaxy is Earth located in?</h3>
+                <div class="options">
+                    <label><input type="radio" name="q3" value="Milky Way"> Milky Way</label>
+                    <label><input type="radio" name="q3" value="Andromeda"> Andromeda</label>
+                    <label><input type="radio" name="q3" value="Whirlpool"> Whirlpool</label>
+                    <label><input type="radio" name="q3" value="Triangulum"> Triangulum</label>
+                </div>
+            </div>
+            <div class="question">
+                <h3>4. Which planet has the most rings?</h3>
+                <div class="options">
+                    <label><input type="radio" name="q4" value="Saturn"> Saturn</label>
+                    <label><input type="radio" name="q4" value="Uranus"> Uranus</label>
+                    <label><input type="radio" name="q4" value="Jupiter"> Jupiter</label>
+                    <label><input type="radio" name="q4" value="Neptune"> Neptune</label>
+                </div>
+            </div>
+            <div class="question">
+                <h3>5. Which planet is closest to the Sun?</h3>
+                <div class="options">
+                    <label><input type="radio" name="q5" value="Mercury"> Mercury</label>
+                    <label><input type="radio" name="q5" value="Venus"> Venus</label>
+                    <label><input type="radio" name="q5" value="Earth"> Earth</label>
+                    <label><input type="radio" name="q5" value="Mars"> Mars</label>
+                </div>
+            </div>
+            <div class="question">
+                <h3>6. Who was the first person to walk on the Moon?</h3>
+                <div class="options">
+                    <label><input type="radio" name="q6" value="Neil Armstrong"> Neil Armstrong</label>
+                    <label><input type="radio" name="q6" value="Buzz Aldrin"> Buzz Aldrin</label>
+                    <label><input type="radio" name="q6" value="Yuri Gagarin"> Yuri Gagarin</label>
+                    <label><input type="radio" name="q6" value="Michael Collins"> Michael Collins</label>
+                </div>
+            </div>
+            <div class="question">
+                <h3>7. What is the Sun primarily made of?</h3>
+                <div class="options">
+                    <label><input type="radio" name="q7" value="Hydrogen"> Hydrogen</label>
+                    <label><input type="radio" name="q7" value="Helium"> Helium</label>
+                    <label><input type="radio" name="q7" value="Oxygen"> Oxygen</label>
+                    <label><input type="radio" name="q7" value="Carbon"> Carbon</label>
+                </div>
+            </div>
+            <div class="question">
+                <h3>8. What is the closest planet to Earth?</h3>
+                <div class="options">
+                    <label><input type="radio" name="q8" value="Venus"> Venus</label>
+                    <label><input type="radio" name="q8" value="Mars"> Mars</label>
+                    <label><input type="radio" name="q8" value="Mercury"> Mercury</label>
+                    <label><input type="radio" name="q8" value="Jupiter"> Jupiter</label>
+                </div>
+            </div>
+            <div class="question">
+                <h3>9. What type of celestial body is the Moon?</h3>
+                <div class="options">
+                    <label><input type="radio" name="q9" value="Satellite"> Satellite</label>
+                    <label><input type="radio" name="q9" value="Planet"> Planet</label>
+                    <label><input type="radio" name="q9" value="Star"> Star</label>
+                    <label><input type="radio" name="q9" value="Asteroid"> Asteroid</label>
+                </div>
+            </div>
+            <div class="question">
+                <h3>10. Which planet is known for its Great Red Spot?</h3>
+                <div class="options">
+                    <label><input type="radio" name="q10" value="Jupiter"> Jupiter</label>
+                    <label><input type="radio" name="q10" value="Mars"> Mars</label>
+                    <label><input type="radio" name="q10" value="Saturn"> Saturn</label>
+                    <label><input type="radio" name="q10" value="Neptune"> Neptune</label>
+                </div>
+            </div>
 
-<div class="calculator">
-    <h2>Deep Calculator</h2>
-    <input type="text" id="display" disabled>
+            <!-- Questions 11-20 -->
+            <div class="question">
+                <h3>11. Which planet is famous for its rings?</h3>
+                <div class="options">
+                    <label><input type="radio" name="q11" value="Saturn"> Saturn</label>
+                    <label><input type="radio" name="q11" value="Jupiter"> Jupiter</label>
+                    <label><input type="radio" name="q11" value="Uranus"> Uranus</label>
+                    <label><input type="radio" name="q11" value="Neptune"> Neptune</label>
+                </div>
+            </div>
+            <div class="question">
+                <h3>12. What is a black hole?</h3>
+                <div class="options">
+                    <label><input type="radio" name="q12" value="A region of space with strong gravity"> A region of space with strong gravity</label>
+                    <label><input type="radio" name="q12" value="A star"> A star</label>
+                    <label><input type="radio" name="q12" value="A planet"> A planet</label>
+                    <label><input type="radio" name="q12" value="A comet"> A comet</label>
+                </div>
+            </div>
+            <div class="question">
+                <h3>13. Which mission first landed humans on the Moon?</h3>
+                <div class="options">
+                    <label><input type="radio" name="q13" value="Apollo 11"> Apollo 11</label>
+                    <label><input type="radio" name="q13" value="Apollo 10"> Apollo 10</label>
+                    <label><input type="radio" name="q13" value="Apollo 12"> Apollo 12</label>
+                    <label><input type="radio" name="q13" value="Apollo 13"> Apollo 13</label>
+                </div>
+            </div>
+            <div class="question">
+                <h3>14. Which planet is known as the “Morning Star”?</h3>
+                <div class="options">
+                    <label><input type="radio" name="q14" value="Venus"> Venus</label>
+                    <label><input type="radio" name="q14" value="Mercury"> Mercury</label>
+                    <label><input type="radio" name="q14" value="Mars"> Mars</label>
+                    <label><input type="radio" name="q14" value="Jupiter"> Jupiter</label>
+                </div>
+            </div>
+            <div class="question">
+                <h3>15. Which planet is known for its blue color?</h3>
+                <div class="options">
+                    <label><input type="radio" name="q15" value="Neptune"> Neptune</label>
+                    <label><input type="radio" name="q15" value="Earth"> Earth</label>
+                    <label><input type="radio" name="q15" value="Uranus"> Uranus</label>
+                    <label><input type="radio" name="q15" value="Saturn"> Saturn</label>
+                </div>
+            </div>
+            <div class="question">
+                <h3>16. What is a comet primarily made of?</h3>
+                <div class="options">
+                    <label><input type="radio" name="q16" value="Ice and dust"> Ice and dust</label>
+                    <label><input type="radio" name="q16" value="Rock"> Rock</label>
+                    <label><input type="radio" name="q16" value="Gas"> Gas</label>
+                    <label><input type="radio" name="q16" value="Metal"> Metal</label>
+                </div>
+            </div>
+            <div class="question">
+                <h3>17. Which planet is hottest in our solar system?</h3>
+                <div class="options">
+                    <label><input type="radio" name="q17" value="Venus"> Venus</label>
+                    <label><input type="radio" name="q17" value="Mercury"> Mercury</label>
+                    <label><input type="radio" name="q17" value="Mars"> Mars</label>
+                    <label><input type="radio" name="q17" value="Jupiter"> Jupiter</label>
+                </div>
+            </div>
+            <div class="question">
+                <h3>18. What constellation contains Orion’s Belt?</h3>
+                <div class="options">
+                    <label><input type="radio" name="q18" value="Orion"> Orion</label>
+                    <label><input type="radio" name="q18" value="Ursa Major"> Ursa Major</label>
+                    <label><input type="radio" name="q18" value="Cassiopeia"> Cassiopeia</label>
+                    <label><input type="radio" name="q18" value="Leo"> Leo</label>
+                </div>
+            </div>
+            <div class="question">
+                <h3>19. Which planet has the fastest orbit around the Sun?</h3>
+                <div class="options">
+                    <label><input type="radio" name="q19" value="Mercury"> Mercury</label>
+                    <label><input type="radio" name="q19" value="Venus"> Venus</label>
+                    <label><input type="radio" name="q19" value="Earth"> Earth</label>
+                    <label><input type="radio" name="q19" value="Mars"> Mars</label>
+                </div>
+            </div>
+            <div class="question">
+                <h3>20. Which galaxy is nearest to the Milky Way?</h3>
+                <div class="options">
+                    <label><input type="radio" name="q20" value="Andromeda"> Andromeda</label>
+                    <label><input type="radio" name="q20" value="Triangulum"> Triangulum</label>
+                    <label><input type="radio" name="q20" value="Whirlpool"> Whirlpool</label>
+                    <label><input type="radio" name="q20" value="Sombrero"> Sombrero</label>
+                </div>
+            </div>
 
-    <div class="buttons">
-        <button class="clear" onclick="clearDisplay()">C</button>
-        <button onclick="appendValue('/')">/</button>
-        <button onclick="appendValue('*')">*</button>
-        <button onclick="appendValue('-')">-</button>
-
-        <button onclick="appendValue('7')">7</button>
-        <button onclick="appendValue('8')">8</button>
-        <button onclick="appendValue('9')">9</button>
-        <button onclick="appendValue('+')">+</button>
-
-        <button onclick="appendValue('4')">4</button>
-        <button onclick="appendValue('5')">5</button>
-        <button onclick="appendValue('6')">6</button>
-        <button onclick="appendValue('.')">.</button>
-
-        <button onclick="appendValue('1')">1</button>
-        <button onclick="appendValue('2')">2</button>
-        <button onclick="appendValue('3')">3</button>
-        <button class="equal" onclick="calculate()">=</button>
-
-        <button style="grid-column: span 4;" onclick="appendValue('0')">0</button>
+            <button type="button" onclick="checkQuiz()">Submit Quiz</button>
+        </form>
+        <div class="result" id="result"></div>
     </div>
-</div>
 
-<script>
-    function appendValue(value) {
-        document.getElementById("display").value += value;
-    }
+    <script>
+        const answers = {
+            q1:"Jupiter", q2:"Mars", q3:"Milky Way", q4:"Saturn", q5:"Mercury",
+            q6:"Neil Armstrong", q7:"Hydrogen", q8:"Venus", q9:"Satellite", q10:"Jupiter",
+            q11:"Saturn", q12:"A region of space with strong gravity", q13:"Apollo 11", q14:"Venus",
+            q15:"Neptune", q16:"Ice and dust", q17:"Venus", q18:"Orion", q19:"Mercury", q20:"Andromeda"
+        };
 
-    function clearDisplay() {
-        document.getElementById("display").value = "";
-    }
-
-    function calculate() {
-        try {
-            let result = Function("return " + document.getElementById("display").value)();
-            document.getElementById("display").value = result;
-        } catch {
-            document.getElementById("display").value = "Error";
+        function checkQuiz(){
+            let score = 0;
+            for(let i=1;i<=20;i++){
+                let q = document.querySelector(`input[name="q${i}"]:checked`);
+                if(q && q.value===answers[`q${i}`]) score++;
+            }
+            document.getElementById("result").innerText = `Your Score: ${score} / 20`;
         }
-    }
-</script>
-
+    </script>
 </body>
-
 </html>
-
